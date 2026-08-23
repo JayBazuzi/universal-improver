@@ -67,15 +67,15 @@ If you don't have such a tool... ask Claude to write one for you.
 # Command line:
 
 ```
-Usage: universal-improver <finder-tool> <fixer-tool> --count <N> [--build-and-test <build-and-test-tool>] [--random] [--parallel <N>]
+Usage: universal-improver.sh <finder-tool> <fixer-tool> --count <N> [--build-and-test <build-and-test-tool>] [--random] [--parallel <N>]
 
   finder-tool: a command to identify issues to fix, outputting one per line
   fixer-tool:  a command that takes one line from finder-tool as input and,
                if it successfully addresses the issue, prints a commit message
 
-  --count <N>             Number of items to fix before stopping (default: 1)
+  --count <N>             Number of items to attempt to fix before stopping (default: 1)
   --build-and-test <cmd>  Command to run after each fix to verify nothing broke;
-                          if it fails, the fix is reverted and skipped (default: ./build-and-test)
+                          if it fails, the fix is reverted and skipped (default: ./build-and-test.sh)
   --random                Pick items from the finder's output in random order (default: top-to-bottom)
   --parallel <N>          Fix up to N items concurrently (each in its own
                           worktree), merging successful fixes in turn

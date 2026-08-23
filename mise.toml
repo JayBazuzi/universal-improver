@@ -1,0 +1,25 @@
+[tools]
+"npm:bats" = "latest"
+shellcheck = "latest"
+
+[tasks.shellcheck]
+run = "shellcheck *.sh"
+
+[tasks.check-exec-bits]
+run = "./check-exec-bits.sh"
+
+[tasks.build-and-test]
+depends = ["shellcheck", "check-exec-bits"]
+# Invoked via `bash .../bin/bats` rather than the bare `bats` shim: mise's
+# npm backend doesn't generate a working bin shim for bats on Windows.
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+bats_dir="$(mise where npm:bats)"
+if [ -e "$bats_dir/node_modules/bats/bin/bats" ]; then
+  bats="$bats_dir/node_modules/bats/bin/bats"
+else
+  bats="$bats_dir/lib/node_modules/bats/bin/bats"
+fi
+bash "$bats" tests/universal-improver.bats
+"""
